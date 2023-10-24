@@ -2,22 +2,36 @@ import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 import pandas as pd
+import random
 import matplotlib.pyplot as plt
 
+# Define the file path
 file_path = r'D:\01 Lovely Professional University\5TH SEMESTER\PYTHON\Unit_4\input_data.csv'
+
+# Load data from the CSV file
 data = pd.read_csv(file_path)
+
+# Define fuzzy sets for temperature, humidity, and fan speed
 temperature = ctrl.Antecedent(np.arange(0, 101, 1), 'temperature')
 humidity = ctrl.Antecedent(np.arange(0, 101, 1), 'humidity')
 fan_speed = ctrl.Consequent(np.arange(0, 101, 1), 'fan_speed')
+
+# Define fuzzy membership functions for temperature
 temperature['cold'] = fuzz.trimf(temperature.universe, [0, 0, 50])
 temperature['cool'] = fuzz.trimf(temperature.universe, [0, 50, 100])
 temperature['warm'] = fuzz.trimf(temperature.universe, [50, 100, 100])
+
+# Define fuzzy membership functions for humidity
 humidity['dry'] = fuzz.trimf(humidity.universe, [0, 0, 50])
 humidity['comfortable'] = fuzz.trimf(humidity.universe, [0, 50, 100])
 humidity['humid'] = fuzz.trimf(humidity.universe, [50, 100, 100])
+
+# Define fuzzy membership functions for fan speed
 fan_speed['low'] = fuzz.trimf(fan_speed.universe, [0, 0, 50])
 fan_speed['medium'] = fuzz.trimf(fan_speed.universe, [0, 50, 100])
 fan_speed['high'] = fuzz.trimf(fan_speed.universe, [50, 100, 100])
+
+# Define fuzzy rules
 rule1 = ctrl.Rule(temperature['cold'] & humidity['dry'], fan_speed['low'])
 rule2 = ctrl.Rule(temperature['cool'] & humidity['comfortable'], fan_speed['medium'])
 rule3 = ctrl.Rule(temperature['warm'] & humidity['humid'], fan_speed['high'])
@@ -59,7 +73,7 @@ plt.grid()
 
 # Plot the fan speed output
 fan_speed.view(sim=fan_speed_simulation)
-plt.title(' Fan Speed ')
+plt.title('Fuzzy Fan Speed Output')
 plt.xlabel('Fan Speed (%)')
 plt.grid()
 
